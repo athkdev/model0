@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import get_hello
+from .views import create_model
 
 urlpatterns = [
-    path('hello/', get_hello, name='get_hello'),
+    path("create-model/", create_model, name="create_model"),
 ]
