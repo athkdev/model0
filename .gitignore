@@ -122,7 +122,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.env*
+# ! operator is used if you want to include a certain file in git
+!.env.example
 .venv
 env/
 venv/
