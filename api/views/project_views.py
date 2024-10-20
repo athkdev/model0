@@ -23,6 +23,7 @@ def create_project(request):
 
         validate(user_id, "User ID is required!")
         validate(project_name, "Project name is required!")
+        validate(description, "Description is required!")
 
         user = get_object_or_404(User, id=user_id)
         project = Project.objects.create(

@@ -5,11 +5,13 @@ from .views.smmodel_views import (
     get_inference,
     create_endpoint,
     delete_endpoint,
+    get_models,
 )
 
 from .views.project_views import create_project
 
 urlpatterns = [
+    path("model/", get_models, name="get_models"),
     path("model/create/", create_model, name="create_model"),
     path("model/deploy/", create_endpoint, name="deploy_model"),
     path("model/withdraw/", delete_endpoint, name="withdraw_model"),

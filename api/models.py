@@ -28,7 +28,7 @@ class Project(models.Model):
         User, on_delete=models.CASCADE
     )  # is models.DO_NOTHING a better choice?
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited_at = models.DateTimeField(auto_now=True)
 

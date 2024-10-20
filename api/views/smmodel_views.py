@@ -1,4 +1,5 @@
 import os
+import json
 
 from botocore.endpoint import Endpoint
 from django.shortcuts import render, get_object_or_404
@@ -35,7 +36,7 @@ def create_model(request):
         # validate(model_type, "Model type is required!")
         validate(user_id, "User ID is required!")
         validate(project_id, "Project ID is required!")
-        validate(auth_token, "Auth token is required!")
+        # validate(auth_token, "Auth token is required!")
 
         """
         if all validations are gtg, let's add the entry in the data base in the following format
@@ -49,6 +50,10 @@ def create_model(request):
             PrimaryContainer={
                 "Image": "%s" % os.getenv("AWS_IMAGE_URI"),
                 "ImageConfig": {"RepositoryAccessMode": "Platform"},
+                "Environment": {
+                    "HF_TASK": "text-generation",  # Replace with your actual task
+                    "HF_MODEL_ID": "gpt2",  # Replace with your actual task
+                },
             },
             ExecutionRoleArn="arn:aws:iam::%s:role/SageMakerOperator"
             % os.getenv("AWS_ACCOUNT_ID"),
@@ -57,7 +62,7 @@ def create_model(request):
         project = get_object_or_404(Project, id=project_id)
 
         sm_model = SMModel.objects.create(
-            project_id=project_id,
+            project_id=project,
             name=model_name,
             description=description,
             aws_arn=model_info.get("ModelArn"),
@@ -90,7 +95,7 @@ def get_models(request):
 
     try:
         user_id = request.data.get("user_id", None)
-        project_id = request.data.get("project_id", None)
+        project_id = request.GET.get("project_id", None)
 
         validate(project_id, "Project ID is required!")
 
@@ -212,14 +217,16 @@ def get_inference(request):
         prompt_response = runtime_client.invoke_endpoint(
             EndpointName=endpoint_name,
             ContentType="application/json",
-            Body=f'{"inputs": "{user_prompt}"}',
+            Body=json.dumps(
+                {"inputs": user_prompt, "parameters": {"max_new_tokens": 200}}
+            ),
         )
 
         print(prompt_response)
 
         return Response(
             {
-                "message": "Endpoint and endpoint config deleted successfully.",
+                "message": "Prompt was sent through to the model.",
                 "response": prompt_response,
             },
             status=status.HTTP_204_NO_CONTENT,
