@@ -116,7 +116,7 @@ def create_endpoint(request):
         validate(model_id, "Model ID is required!")
         # validate(project_id, "Project ID is required!")
 
-        sm_model = SMModel.objects.get(id=model_id)
+        sm_model = get_object_or_404(SMModel, id=model_id)
         model_name = sm_model.name
 
         endpoint_config_name = model_name + "-endpoint-config"
@@ -161,7 +161,7 @@ def delete_endpoint(request):
 
         validate(model_id, "Model ID is required!")
 
-        sm_model = SMModel.objects.get(id=model_id)
+        sm_model = get_object_or_404(SMModel, id=model_id)
 
         if not sm_model.endpoint_name:
             raise Exception("Model does not contain an endpoint")
@@ -202,4 +202,4 @@ def get_inference(request):
     validate(model_id, "Model ID is required!")
     validate(user_prompt, "User prompt is required!")
 
-    sm_model = SMModel.objects.get(id=model_id)
+    sm_model = get_object_or_404(SMModel, id=model_id)
