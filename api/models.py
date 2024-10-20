@@ -6,6 +6,7 @@ from .helpers import Helper
 
 # Create your models here.
 
+
 class User(AbstractUser):
     id = Helper.generate_uuid()
     role = models.CharField(max_length=50)
@@ -23,7 +24,9 @@ class User(AbstractUser):
 
 class Project(models.Model):
     id = Helper.generate_uuid()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)   # is models.DO_NOTHING a better choice?
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )  # is models.DO_NOTHING a better choice?
     name = models.CharField(max_length=100)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,6 +35,7 @@ class Project(models.Model):
     def __str__(self):
         return self.id
 
+
 class SMModel(models.Model):
     id = Helper.generate_uuid()
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -39,6 +43,7 @@ class SMModel(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited_at = models.DateTimeField(auto_now=True)
+    aws_arn = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.id
