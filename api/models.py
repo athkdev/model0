@@ -44,6 +44,8 @@ class SMModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited_at = models.DateTimeField(auto_now=True)
     aws_arn = models.CharField(max_length=255, blank=True)
+    endpoint_name = models.CharField(max_length=255, blank=True)
+    endpoint_config_name = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.id
