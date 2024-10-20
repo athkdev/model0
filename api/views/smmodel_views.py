@@ -142,6 +142,8 @@ def create_endpoint(request):
 
         sm_model.endpoint_name = endpoint_name
         sm_model.endpoint_config_name = endpoint_config_name
+        sm_model.is_deployed = True
+
         sm_model.save()
 
         return Response(
@@ -156,7 +158,6 @@ def create_endpoint(request):
 @api_view(["POST"])
 def delete_endpoint(request):
     try:
-        # user_id = request.data.get("user_id", None)
         model_id = request.data.get("model_id", None)
 
         validate(model_id, "Model ID is required!")
@@ -176,6 +177,7 @@ def delete_endpoint(request):
 
         sm_model.endpoint_name = ""
         sm_model.endpoint_config_name = ""
+        sm_model.is_deployed = False
 
         sm_model.save()
 
@@ -193,13 +195,34 @@ def delete_endpoint(request):
 @api_view(["POST"])
 def get_inference(request):
 
-    user_id = request.data.get("user_id", None)
-    model_id = request.data.get("model_id", None)
+    try:
+        user_id = request.data.get("user_id", None)
+        model_id = request.data.get("model_id", None)
 
-    user_prompt = request.data.get("user_prompt", None)
+        user_prompt = request.data.get("user_prompt", None)
 
-    validate(user_id, "User ID is required!")
-    validate(model_id, "Model ID is required!")
-    validate(user_prompt, "User prompt is required!")
+        validate(user_id, "User ID is required!")
+        validate(model_id, "Model ID is required!")
+        validate(user_prompt, "User prompt is required!")
 
-    sm_model = get_object_or_404(SMModel, id=model_id)
+        sm_model = get_object_or_404(SMModel, id=model_id)
+
+        endpoint_name = sm_model.endpoint_name
+
+        prompt_response = runtime_client.invoke_endpoint(
+            EndpointName=endpoint_name,
+            ContentType="application/json",
+            Body=f'{"inputs": "{user_prompt}"}',
+        )
+
+        print(prompt_response)
+
+        return Response(
+            {
+                "message": "Endpoint and endpoint config deleted successfully.",
+                "response": prompt_response,
+            },
+            status=status.HTTP_204_NO_CONTENT,
+        )
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

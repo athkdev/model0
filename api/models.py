@@ -46,6 +46,7 @@ class SMModel(models.Model):
     aws_arn = models.CharField(max_length=255, blank=True)
     endpoint_name = models.CharField(max_length=255, blank=True)
     endpoint_config_name = models.CharField(max_length=255, blank=True)
+    is_deployed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.id
