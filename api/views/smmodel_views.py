@@ -28,13 +28,10 @@ def create_model(request):
         model_name = request.data.get("model_name", None)
         description = request.data.get("description", None)
         # model_type = request.data.get("model_type", None)
-        user_id = request.data.get("user_id", None)
         project_id = request.data.get("project_id", None)
         auth_token = request.data.get("auth_token", None)
 
         validate(model_name, "Model name is required!")
-        # validate(model_type, "Model type is required!")
-        validate(user_id, "User ID is required!")
         validate(project_id, "Project ID is required!")
         # validate(auth_token, "Auth token is required!")
 
@@ -51,8 +48,8 @@ def create_model(request):
                 "Image": "%s" % os.getenv("AWS_IMAGE_URI"),
                 "ImageConfig": {"RepositoryAccessMode": "Platform"},
                 "Environment": {
-                    "HF_TASK": "text-generation",  # Replace with your actual task
-                    "HF_MODEL_ID": "gpt2",  # Replace with your actual task
+                    "HF_TASK": "text-generation",
+                    "HF_MODEL_ID": "gpt2",
                 },
             },
             ExecutionRoleArn="arn:aws:iam::%s:role/SageMakerOperator"
@@ -113,11 +110,11 @@ def get_models(request):
 def create_endpoint(request):
 
     try:
-        user_id = request.data.get("user_id", None)
+        # user_id = request.data.get("user_id", None)
         model_id = request.data.get("model_id", None)
-        project_id = request.data.get("project_id", None)
+        # project_id = request.data.get("project_id", None)
 
-        validate(user_id, "User ID is required!")
+        # validate(user_id, "User ID is required!")
         validate(model_id, "Model ID is required!")
         # validate(project_id, "Project ID is required!")
 
