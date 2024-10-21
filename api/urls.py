@@ -8,7 +8,7 @@ from .views.smmodel_views import (
     get_models,
 )
 
-from .views.project_views import create_project
+from .views.project_views import create_project, get_user_projects
 
 urlpatterns = [
     path("model/", get_models, name="get_models"),
@@ -17,4 +17,5 @@ urlpatterns = [
     path("model/withdraw/", delete_endpoint, name="withdraw_model"),
     path("model/inference", get_inference, name="get_inference"),
     path("project/create", create_project, name="create_project"),
+    path("project/", get_user_projects, name="get_user_projects"),
 ]

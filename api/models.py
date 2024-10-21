@@ -12,7 +12,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     # override the save method, to set the email same as username
     def save(self, *args, **kwargs):
@@ -33,7 +33,7 @@ class Project(models.Model):
     last_edited_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class SMModel(models.Model):
@@ -49,4 +49,4 @@ class SMModel(models.Model):
     is_deployed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return str(self.id)

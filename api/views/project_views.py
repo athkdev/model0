@@ -1,3 +1,4 @@
+import json
 import os
 
 from django.shortcuts import render, get_object_or_404
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from api.models import Project, SMModel
 from ..models import User
-from api.serializer import UserSerializer
+from api.serializer import UserSerializer, ProjectSerializer
 
 from ..services import sagemaker_client, runtime_client
 
@@ -41,5 +42,19 @@ def create_project(request):
             },
             status=status.HTTP_201_CREATED,
         )
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def get_user_projects(request):
+    try:
+        user_id = request.GET.get("user_id", None)
+
+        validate(user_id, "User ID is required!")
+
+        projects = Project.objects.filter(user_id=user_id)
+
+        return Response(ProjectSerializer(projects, many=True).data, status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
