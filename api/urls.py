@@ -6,6 +6,7 @@ from .views.smmodel_views import (
     create_endpoint,
     delete_endpoint,
     get_models,
+    get_endpoint_status,
 )
 
 from .views.project_views import create_project, get_user_projects
@@ -18,4 +19,5 @@ urlpatterns = [
     path("model/inference", get_inference, name="get_inference"),
     path("project/create", create_project, name="create_project"),
     path("project/", get_user_projects, name="get_user_projects"),
+    path("model/endpoint/", get_endpoint_status, name="get_endpoint_status"),
 ]

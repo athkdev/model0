@@ -219,8 +219,6 @@ def get_inference(request):
             ),
         )
 
-        print(prompt_response)
-
         return Response(
             {
                 "message": "Prompt was sent through to the model.",
@@ -230,3 +228,35 @@ def get_inference(request):
         )
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def get_endpoint_status(request):
+    """
+    Return endpoint status
+
+    Possible values can be found at https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_DescribeEndpoint.html#sagemaker-DescribeEndpoint-response-EndpointStatus
+
+    :param request:
+    :return: Response
+    """
+
+    try:
+        endpoint_name = request.GET.get("endpoint_name", None)
+
+        endpoint_description = sagemaker_client.describe_endpoint(
+            EndpointName=endpoint_name
+        )
+
+        return Response(
+            {"endpoint_status": endpoint_description.get("EndpointStatus")},
+            status=status.HTTP_200_OK,
+        )
+    except Exception as e:
+        return Response(
+            {
+                "endpoint_status": "EndpointError: No such endpoint exists.",
+                "error": str(e),
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
