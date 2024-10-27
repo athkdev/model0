@@ -177,8 +177,8 @@ def delete_endpoint(request):
             EndpointName=sm_model.endpoint_name
         )
 
-        sm_model.endpoint_name = ""
-        sm_model.endpoint_config_name = ""
+        # sm_model.endpoint_name = ""
+        # sm_model.endpoint_config_name = ""
         sm_model.is_deployed = False
 
         sm_model.save()
@@ -203,7 +203,7 @@ def get_inference(request):
 
         user_prompt = request.data.get("user_prompt", None)
 
-        validate(user_id, "User ID is required!")
+        # validate(user_id, "User ID is required!")
         validate(model_id, "Model ID is required!")
         validate(user_prompt, "User prompt is required!")
 
@@ -224,7 +224,7 @@ def get_inference(request):
                 "message": "Prompt was sent through to the model.",
                 "response": prompt_response,
             },
-            status=status.HTTP_204_NO_CONTENT,
+            status=status.HTTP_200_OK,
         )
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
