@@ -85,8 +85,8 @@ def signup(request):
     if serializer.is_valid():
 
         user = User(
-            username=serializer.validated_data["username"],
-            email=serializer.validated_data["username"],
+            username=serializer.validated_data["email"],
+            email=serializer.validated_data["email"],
             role=serializer.validated_data.get("role", "user"),
         )
 
