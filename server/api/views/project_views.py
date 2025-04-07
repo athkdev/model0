@@ -58,3 +58,22 @@ def get_user_projects(request):
         return Response(ProjectSerializer(projects, many=True).data, status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def get_project(request, project_id):
+    try:
+        project = get_object_or_404(Project, id=project_id)
+        
+        project_data = {
+            "id": str(project.id),
+            "user_id": str(project.user_id.id),
+            "name": project.name,
+            "description": project.description,
+            "created_at": project.created_at.isoformat(),
+            "last_edited_at": project.last_edited_at.isoformat()
+        }
+        
+        return Response(project_data)
+        
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
