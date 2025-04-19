@@ -1,0 +1,29 @@
+name: Deploy to EC2 on Main Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            rm -rf $HOME/model0
+            git clone https://github.com/athkdev/model0.git
+
+            apache2ctl configtest
+
+            sudo systemctl reload apache2
+            sudo systemctl restart apache2
