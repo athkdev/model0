@@ -23,6 +23,14 @@ jobs:
             rm -rf $HOME/model0
             git clone https://github.com/athkdev/model0.git
 
+            cd $HOME/model0/server
+
+            python3 -m venv .venv
+            source .venv/bin/activate
+
+            pip install -r requirements.txt
+            pip install mod_wsgi
+
             apache2ctl configtest
 
             sudo systemctl reload apache2
