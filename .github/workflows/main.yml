@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            rm -rf $HOME/model0
+            sudo rm -rf $HOME/model0
             git clone https://github.com/athkdev/model0.git
 
             cd $HOME/model0/server
