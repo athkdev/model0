@@ -21,13 +21,9 @@ from django.urls import path, include
 from server.views import health_check
 
 
-# Create base patterns without the prefix
-base_urlpatterns = [
+urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
     path("auth/", include("userauth.urls")),
     path("health-check/", health_check, name="health_check"),
 ]
-
-# Apply the prefix to all routes
-urlpatterns = [path("v1/", include(base_urlpatterns))]
