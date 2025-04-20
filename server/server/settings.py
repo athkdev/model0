@@ -31,7 +31,7 @@ DEBUG = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['m0.athk.dev']
+ALLOWED_HOSTS = ['m0.athk.dev', 'localhost']
 
 # Application definition
 
