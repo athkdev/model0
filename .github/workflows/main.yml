@@ -29,7 +29,6 @@ jobs:
             source .venv/bin/activate
 
             pip install -r requirements.txt
-            pip install mod_wsgi
 
             apache2ctl configtest
 
