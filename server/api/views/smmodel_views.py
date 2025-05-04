@@ -37,9 +37,9 @@ def create_model(request):
 
         """
         if all validations are gtg, let's add the entry in the data base in the following format
-        
+
         MODEL_ID (PK), MODEL_AWS_ARN, PROJECT_ID (FK), USER_ID (FK)
-        
+
         """
 
         model_info = sagemaker_client.create_model(
@@ -48,12 +48,12 @@ def create_model(request):
                 "Image": "%s" % os.getenv("AWS_IMAGE_URI"),
                 "ImageConfig": {"RepositoryAccessMode": "Platform"},
                 "Environment": {
-                    "HF_TASK": "text-generation",
-                    "HF_MODEL_ID": "gpt2",
+                    "HF_TASK": "text-generation",    # this should be pulled from user
+                    "HF_MODEL_ID": "gpt2",     # this should be pulled from user
                 },
             },
-            ExecutionRoleArn="arn:aws:iam::%s:role/SageMakerOperator"
-            % os.getenv("AWS_ACCOUNT_ID"),
+            ExecutionRoleArn="arn:aws:iam::%s:role/%s"
+            % (os.getenv("AWS_ACCOUNT_ID"), os.getenv("AWS_SAGEMAKER_ROLE")),
         )
 
         project = get_object_or_404(Project, id=project_id)
@@ -91,7 +91,7 @@ def get_models(request):
     """
 
     try:
-        user_id = request.data.get("user_id", None)
+        # user_id = request.data.get("user_id", None)
         project_id = request.GET.get("project_id", None)
 
         validate(project_id, "Project ID is required!")
